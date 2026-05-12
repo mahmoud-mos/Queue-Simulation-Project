@@ -1,6 +1,8 @@
 # Queue Simulation — Multi-Server Discrete-Event Simulator
 
-A discrete-event queueing simulation built with a **C++ core engine** and a **Python/Flask web interface**. Users can configure server count and arrival rate through a browser, run the simulation, and instantly visualize the results via interactive charts.
+An event queueing simulation built with a **C++ engine at its core ** and a **Python/Flask web interface**. Users can configure server count and arrival rate through a browser, run the simulation, and instantly visualize the results via interactive charts.
+
+![System Map](./queue_simulation_dependency_map_final_v3.jpg)
 
 ---
 
