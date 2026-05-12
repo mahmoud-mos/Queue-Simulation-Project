@@ -1,7 +1,9 @@
-// Mahmoud Mostafa, 320250263, Person D
-//COntributors: Amr Hany.
+// Mahmoud Mostafa, 320250263
+// Contributors: Amr Hany
+
 #ifndef FILE_HELPER_H
 #define FILE_HELPER_H
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -43,11 +45,14 @@ inline void writeResults(const vector<MinuteSnapshot> &snapshots)
         cerr << "ERROR: couldn't create results.csv\n";
         return;
     }
+
     outFile << "minute,queue_length,customers_served,avg_wait_time\n";
     for (const auto &s : snapshots)
         outFile << s.minute << "," << s.queue_length << ","
                 << s.customers_served << "," << s.avg_wait_time << "\n";
+
     outFile.close();
     cout << "Results written to results.csv\n";
 }
+
 #endif
