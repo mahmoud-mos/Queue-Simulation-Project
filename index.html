@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QSim — Queue Simulation System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #111210;
+      --panel: #1a1c18;
+      --panel2: #21231f;
+      --raised: #252720;
+      --border: #333530;
+      --border2: #444640;
+      --amber: #e8a020;
+      --amber2: #f0b840;
+      --amber-dim: #7a5510;
+      --green: #4caf6a;
+      --green-dim: #1a3d24;
+      --red: #d94040;
+      --text: #d8d4c8;
+      --text2: #8a8880;
+      --text3: #555450;
+      --mono: 'Share Tech Mono', monospace;
+      --display: 'Rajdhani', sans-serif;
+      --body: 'Barlow', sans-serif;
+      --screw: radial-gradient(circle at 35% 35%, #555 0%, #2a2a2a 60%, #1a1a1a 100%);
+    }
+
+    body {
+      background: var(--bg);
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.012) 39px, rgba(255,255,255,0.012) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.012) 39px, rgba(255,255,255,0.012) 40px);
+      color: var(--text);
+      font-family: var(--body);
+      min-height: 100vh;
+      padding: 2rem 1.5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sys-id { display: flex; align-items: center; gap: 1rem; }
+
+    .sys-logo {
+      width: 34px; height: 34px;
+      background: var(--amber);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+
+    .sys-name {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--amber);
+      text-transform: uppercase;
+    }
+
+    .sys-sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+    }
+
+    .status-cluster { display: flex; align-items: center; gap: 1.5rem; }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.08em;
+    }
+
+    .led {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #2a2a2a;
+      border: 1px solid #1a1a1a;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .led.on    { background: var(--green); box-shadow: 0 0 5px var(--green); }
+    .led.amber { background: var(--amber); box-shadow: 0 0 5px var(--amber); }
+    .led.blink { animation: blink 0.65s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+    .clock { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+
+    /* MAIN */
+    .panel { width: 100%; max-width: 860px; }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      padding-left: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* PARAM BANK */
+    .param-bank {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .screw {
+      position: absolute;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--screw);
+      border: 1px solid #151515;
+    }
+    .screw.tl { top: 7px; left: 7px; }
+    .screw.tr { top: 7px; right: 7px; }
+    .screw.bl { bottom: 7px; left: 7px; }
+    .screw.br { bottom: 7px; right: 7px; }
+
+    .param-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .param-cell {
+      background: var(--panel2);
+      padding: 1.1rem 1rem;
+      transition: background 0.15s;
+      position: relative;
+    }
+    .param-cell:hover { background: var(--raised); }
+
+    .param-cell label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .param-cell input[type=number] {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--amber2);
+      font-family: var(--mono);
+      font-size: 28px;
+      -moz-appearance: textfield;
+      line-height: 1;
+    }
+    .param-cell input::-webkit-outer-spin-button,
+    .param-cell input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .param-unit {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--text3);
+      margin-top: 4px;
+      letter-spacing: 0.06em;
+    }
+
+    .tick-marks {
+      position: absolute;
+      bottom: 5px; right: 7px;
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--border2);
+      letter-spacing: -2px;
+    }
+
+    /* EXECUTE ROW */
+    .execute-row { display: flex; gap: 1rem; align-items: stretch; }
+
+    .exec-btn {
+      flex: 1;
+      padding: 0.9rem 1.5rem;
+      background: var(--amber-dim);
+      border: 1px solid var(--amber);
+      border-radius: 2px;
+      color: var(--amber2);
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    .exec-btn:hover:not(:disabled) {
+      background: #5a3a08;
+      box-shadow: 0 0 18px rgba(232,160,32,0.18);
+    }
+    .exec-btn:active:not(:disabled) { transform: scale(0.998); }
+    .exec-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .exec-indicator {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      min-width: 170px;
+    }
+    .exec-lbl { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: 0.1em; }
+    .exec-val { font-family: var(--mono); font-size: 12px; color: var(--text2); min-height: 15px; }
+    .exec-val.running { color: var(--amber); }
+    .exec-val.done    { color: var(--green); }
+    .exec-val.err     { color: var(--red); font-size: 10px; }
+
+    /* RESULTS */
+    .results-panel { display: none; }
+    .results-panel.active { display: block; }
+
+    /* READOUT STRIP */
+    .readout-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .readout {
+      background: var(--panel2);
+      padding: 1.25rem;
+      position: relative;
+    }
+    .readout::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .readout:nth-child(1)::before { background: var(--amber); }
+    .readout:nth-child(2)::before { background: var(--green); }
+    .readout:nth-child(3)::before { background: var(--border2); }
+
+    .readout-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .readout-val {
+      font-family: var(--mono);
+      font-size: 34px;
+      color: var(--amber2);
+      line-height: 1;
+    }
+    .readout-val.green { color: var(--green); }
+    .readout-val.plain { color: var(--text); }
+    .readout-sub { font-size: 11px; color: var(--text3); font-family: var(--body); margin-top: 5px; }
+
+    /* CHART ROW */
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-panel { background: var(--panel); padding: 1.25rem; }
+
+    .chart-panel-hdr {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot-amber { width:6px; height:6px; border-radius:50%; background:var(--amber); display:inline-block; }
+    .dot-green { width:6px; height:6px; border-radius:50%; background:var(--green); display:inline-block; }
+
+    /* FOOTER */
+    .footer-strip {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .footer-param { font-family: var(--mono); font-size: 9px; color: var(--text3); }
+    .footer-param::before { content: '▸ '; color: var(--amber-dim); }
+    .footer-param span { color: var(--text2); }
+
+    .new-run-btn {
+      margin-left: auto;
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      padding: 5px 14px;
+      border-radius: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .new-run-btn:hover { border-color: var(--amber-dim); color: var(--amber); }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="sys-id">
+    <div class="sys-logo"></div>
+    <div>
+      <div class="sys-name">QSim</div>
+      <div class="sys-sub">Queue Simulation Control System &nbsp;|&nbsp; E-JUST CS Dept.</div>
+    </div>
+  </div>
+  <div class="status-cluster">
+    <div class="status-pill"><div class="led on" id="led-ready"></div>READY</div>
+    <div class="status-pill"><div class="led" id="led-run"></div>RUNNING</div>
+    <div class="clock" id="clock"></div>
+  </div>
+</div>
+
+<div class="panel">
+
+  <div class="section-label">Parameter Input Bank</div>
+  <div class="param-bank">
+    <div class="screw tl"></div><div class="screw tr"></div>
+    <div class="screw bl"></div><div class="screw br"></div>
+
+    <div class="param-grid">
+      <div class="param-cell">
+        <label>Servers</label>
+        <input type="number" id="servers" value="3" min="1" max="20">
+        <div class="param-unit">concurrent units</div>
+        <div class="tick-marks">||||</div>
+      </div>
+      <div class="param-cell">
+        <label>Arrival Prob.</label>
+        <input type="number" id="arrival" value="40" min="1" max="100">
+        <div class="param-unit">% per minute</div>
+        <div class="tick-marks">||||</div>
+      </div>
+      <div class="param-cell">
+        <label>Max Svc Time</label>
+        <input type="number" id="service" value="8" min="1" max="120">
+        <div class="param-unit">minutes max</div>
+        <div class="tick-marks">||||</div>
+      </div>
+      <div class="param-cell">
+        <label>Sim Duration</label>
+        <input type="number" id="simtime" value="60" min="5" max="500">
+        <div class="param-unit">minutes total</div>
+        <div class="tick-marks">||||</div>
+      </div>
+    </div>
+
+    <div class="execute-row">
+      <button class="exec-btn" id="run-btn" onclick="startSim()">▶ &nbsp; EXECUTE SIMULATION</button>
+      <div class="exec-indicator">
+        <div class="exec-lbl">System Status</div>
+        <div class="exec-val" id="status-val">STANDBY</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-panel" id="results-panel">
+
+    <div class="section-label">Output Readouts</div>
+    <div class="readout-strip">
+      <div class="readout">
+        <div class="readout-label">Avg Wait Time</div>
+        <div class="readout-val" id="m-avg">—</div>
+        <div class="readout-sub">minutes per customer</div>
+      </div>
+      <div class="readout">
+        <div class="readout-label">Max Queue Length</div>
+        <div class="readout-val green" id="m-max">—</div>
+        <div class="readout-sub">peak customers waiting</div>
+      </div>
+      <div class="readout">
+        <div class="readout-label">Total Served</div>
+        <div class="readout-val plain" id="m-total">—</div>
+        <div class="readout-sub">customers processed</div>
+      </div>
+    </div>
+
+    <div class="section-label">Signal Traces</div>
+    <div class="chart-row">
+      <div class="chart-panel">
+        <div class="chart-panel-hdr"><span class="dot-amber"></span>Queue Length / Minute</div>
+        <canvas id="chart-queue" height="190"></canvas>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-panel-hdr"><span class="dot-green"></span>Avg Wait Time / Minute</div>
+        <canvas id="chart-wait" height="190"></canvas>
+      </div>
+    </div>
+
+    <div class="footer-strip" id="footer-strip">
+      <button class="new-run-btn" onclick="goBack()">↺ &nbsp; New Run</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let qChart, wChart;
+
+  function updateClock() {
+    document.getElementById('clock').textContent = new Date().toTimeString().slice(0,8);
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  function setStatus(text, cls) {
+    const el = document.getElementById('status-val');
+    el.textContent = text;
+    el.className = 'exec-val ' + (cls || '');
+  }
+
+  function setLeds(running) {
+    document.getElementById('led-ready').className = 'led ' + (running ? '' : 'on');
+    document.getElementById('led-run').className   = 'led ' + (running ? 'amber blink' : '');
+  }
+
+  async function startSim() {
+    const servers = parseInt(document.getElementById('servers').value);
+    const arrival = parseInt(document.getElementById('arrival').value);
+    const service = parseInt(document.getElementById('service').value);
+    const simtime = parseInt(document.getElementById('simtime').value);
+
+    const btn = document.getElementById('run-btn');
+    btn.disabled = true;
+    setLeds(true);
+    setStatus('RUNNING...', 'running');
+    document.getElementById('results-panel').classList.remove('active');
+
+    try {
+      const res = await fetch('/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ servers, arrival_rate: arrival, service_time: service, simulation_time: simtime })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+      setStatus('COMPLETE', 'done');
+      setLeds(false);
+      showResults(data);
+    } catch (err) {
+      setStatus('FAULT: ' + err.message.slice(0, 30), 'err');
+      setLeds(false);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function showResults(data) {
+    const rows = data.rows, summary = data.summary, params = data.params;
+    const labels    = rows.map(r => r.minute);
+    const queueData = rows.map(r => r.queue_length);
+    const waitData  = rows.map(r => r.avg_wait_time);
+
+    document.getElementById('m-avg').textContent   = summary.avg_wait_time.toFixed(1) + ' min';
+    document.getElementById('m-max').textContent   = summary.max_queue_length;
+    document.getElementById('m-total').textContent = summary.total_served;
+
+    document.getElementById('footer-strip').innerHTML = `
+      <div class="footer-param">servers <span>${params.servers}</span></div>
+      <div class="footer-param">arrival <span>${params.arrival_rate}%/min</span></div>
+      <div class="footer-param">max svc <span>${params.service_time} min</span></div>
+      <div class="footer-param">duration <span>${params.simulation_time} min</span></div>
+      <button class="new-run-btn" onclick="goBack()">↺ &nbsp; New Run</button>
+    `;
+
+    document.getElementById('results-panel').classList.add('active');
+
+    if (qChart) qChart.destroy();
+    if (wChart) wChart.destroy();
+
+    const gridColor = '#2a2c28';
+    const tickFont  = { family: 'Share Tech Mono', size: 9 };
+    const tickColor = '#555450';
+    const tooltip   = {
+      backgroundColor: '#21231f', borderColor: '#333530', borderWidth: 1,
+      titleColor: '#8a8880', bodyColor: '#d8d4c8',
+      titleFont: { family: 'Share Tech Mono', size: 9 },
+      bodyFont:  { family: 'Share Tech Mono', size: 11 }
+    };
+    const scales = {
+      x: { ticks: { color: tickColor, font: tickFont, maxTicksLimit: 12 }, grid: { color: gridColor } },
+      y: { ticks: { color: tickColor, font: tickFont }, grid: { color: gridColor }, beginAtZero: true }
+    };
+
+    qChart = new Chart(document.getElementById('chart-queue'), {
+      type: 'bar',
+      data: { labels, datasets: [{ data: queueData, backgroundColor: 'rgba(232,160,32,0.5)', borderColor: '#e8a020', borderWidth: 1, borderRadius: 1, borderSkipped: false }] },
+      options: { responsive: true, plugins: { legend: { display: false }, tooltip }, scales }
+    });
+
+    wChart = new Chart(document.getElementById('chart-wait'), {
+      type: 'line',
+      data: { labels, datasets: [{ data: waitData, borderColor: '#4caf6a', backgroundColor: 'rgba(76,175,106,0.07)', tension: 0.4, fill: true, pointRadius: 2, pointBackgroundColor: '#4caf6a', borderWidth: 1.5 }] },
+      options: { responsive: true, plugins: { legend: { display: false }, tooltip }, scales }
+    });
+  }
+
+  function goBack() {
+    document.getElementById('results-panel').classList.remove('active');
+    setStatus('STANDBY', '');
+    setLeds(false);
+  }
+</script>
+</body>
+</html>
