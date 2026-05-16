@@ -9,7 +9,7 @@
 #include <vector>
 using namespace std;
 
-// Per minute snapshot written during the simulation loop
+// per minute snapshot written during the simulation loop
 struct MinuteSnapshot
 {
     int minute;
@@ -42,13 +42,13 @@ inline void writeResults(const vector<MinuteSnapshot> &snapshots)
     ofstream outFile("results.csv");
     if (!outFile.is_open())
     {
-        cerr << "ERROR: couldn't create results.csv\n";
+        cout << "ERROR: couldn't create results.csv\n";
         return;
     }
 
-    outFile << "minute,queue_length,customers_served,avg_wait_time\n";
+    outFile << "minute,queue_length,customers_served,avg_wait_time\n"; // header for the file
     for (const auto &s : snapshots)
-        outFile << s.minute << "," << s.queue_length << ","
+        outFile << s.minute << "," << s.queue_length << ","    
                 << s.customers_served << "," << s.avg_wait_time << "\n";
 
     outFile.close();
