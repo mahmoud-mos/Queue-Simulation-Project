@@ -48,7 +48,7 @@ inline void writeResults(const vector<MinuteSnapshot> &snapshots)
 
     outFile << "minute,queue_length,customers_served,avg_wait_time\n"; // header for the file
     for (const auto &s : snapshots)
-        outFile << s.minute << "," << s.queue_length << ","
+        outFile << s.minute << "," << s.queue_length << ","    
                 << s.customers_served << "," << s.avg_wait_time << "\n";
 
     outFile.close();

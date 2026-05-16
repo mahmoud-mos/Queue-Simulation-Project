@@ -28,7 +28,11 @@ int main()
     int currentTime = 0;
     int maxQueueLength = 0;
 
+<<<<<<< HEAD
     // Per minute snapshots for the CSV file
+=======
+    //Per minute snapshots for the CSV file 
+>>>>>>> c433081b5217d755b900f36fc1461ecd49bc965c
     vector<MinuteSnapshot> snapshots;
     Queue<Customer> customerQueue;
     Server *servers = new Server[numServers];
