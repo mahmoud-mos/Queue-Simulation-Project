@@ -21,14 +21,14 @@ int main()
     int numServers, arrivalProbability, maxServiceTime, maxSimulationTime;
     readSettings(numServers, arrivalProbability, maxServiceTime, maxSimulationTime);
 
-    // ── Stats ──
+    // Stats
     int totalCustomersServed = 0;
     double totalWaitTime = 0;
     int customerNumber = 1;
     int currentTime = 0;
     int maxQueueLength = 0;
 
-    //Per minute snapshots for the CSV filr 
+    //Per minute snapshots for the CSV file 
     vector<MinuteSnapshot> snapshots;
     Queue<Customer> customerQueue;
     Server* servers = new Server[numServers];
