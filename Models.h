@@ -13,12 +13,12 @@ private:
     int waitTime;
 
 public:
-    Customer() : id(0), arrivalTime(0), requiredServiceTime(0), waitTime(0) {} // EDIT (4)
-    Customer(int id, int arrivalTime, int requiredServiceTime)                 // EDIT (5)
+    Customer() : id(0), arrivalTime(0), requiredServiceTime(0), waitTime(0) {}
+    Customer(int id, int arrivalTime, int requiredServiceTime)
         : id(id), arrivalTime(arrivalTime), requiredServiceTime(requiredServiceTime), waitTime(0)
     {
     }
-    // DISPLAY FOR TESTING ( EDIT 1 )
+    // DISPLAY FOR TESTING
     void display() const
     {
         cout << "Customer ID: " << id
@@ -34,7 +34,7 @@ public:
     {
         return requiredServiceTime;
     }
-    // ADDED: Getters so we can read these values!
+    // Getters to read values from
     int getId() const { return id; }
     int getArrivalTime() const { return arrivalTime; }
     int getWaitTime() const { return waitTime; }
@@ -47,15 +47,15 @@ private:
     int remainingServiceTime;
 
 public:
-    // ADDED: Default constructor just in case we need an array of Servers
+    // Default constructor if we need an array of Servers
     Server()
     {
         id = 0;
         busy = false;
         remainingServiceTime = 0;
     }
-    Server(int id) : id(id), busy(false), remainingServiceTime(0) {} // EDIT (6)
-    // Assigning customer using Pass by Reference (const) for better performance (EDIT 2 )
+    Server(int id) : id(id), busy(false), remainingServiceTime(0) {}
+    // Assigning customer using Pass by Reference (const)
     void assignCustomer(const Customer &customer)
     {
         busy = true;
@@ -73,10 +73,10 @@ public:
             remainingServiceTime = 0;
         }
     }
-    // ADDED: Getters so Person C can check if the server is free!
+    // Getters so main can check if the server is free
     bool isBusy() const { return busy; }
     int getId() const { return id; }
-    // DISPLAY FOR TESTING ( EDIT 3)
+    // DISPLAY FOR TESTING
     void display() const
     {
         cout << "Server ID: " << id

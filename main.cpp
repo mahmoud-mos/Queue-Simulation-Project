@@ -17,28 +17,28 @@ int main()
 {
     srand(time(0));
 
-    //Load parameters from settings.txt (written by flask)
+    // Load parameters from settings.txt (written by flask)
     int numServers, arrivalProbability, maxServiceTime, maxSimulationTime;
     readSettings(numServers, arrivalProbability, maxServiceTime, maxSimulationTime);
 
-    // ── Stats ──
+    // Stats
     int totalCustomersServed = 0;
     double totalWaitTime = 0;
     int customerNumber = 1;
     int currentTime = 0;
     int maxQueueLength = 0;
 
-    //Per minute snapshots for the CSV filr 
+    // Per minute snapshots for the CSV file
     vector<MinuteSnapshot> snapshots;
     Queue<Customer> customerQueue;
-    Server* servers = new Server[numServers];
+    Server *servers = new Server[numServers];
     for (int i = 0; i < numServers; i++)
         servers[i] = Server(i + 1);
 
     cout << "--simulation started | time=" << maxSimulationTime
-        << " servers=" << numServers
-        << " arrivalProb=" << arrivalProbability << "%"
-        << " maxSvc=" << maxServiceTime << "--\n";
+         << " servers=" << numServers
+         << " arrivalProb=" << arrivalProbability << "%"
+         << " maxSvc=" << maxServiceTime << "--\n";
 
     while (currentTime < maxSimulationTime)
     {
@@ -54,7 +54,6 @@ int main()
         if (customerQueue.size() > maxQueueLength)
             maxQueueLength = customerQueue.size();
 
-        
         for (int i = 0; i < numServers; i++)
             servers[i].tick();
 
@@ -72,14 +71,14 @@ int main()
             }
         }
 
-        //recording snapshots for this minute
+        // recording snapshots for this minute
         double avgWait = (totalCustomersServed > 0)
-            ? totalWaitTime / totalCustomersServed
-            : 0.0;
-        snapshots.push_back({ currentTime + 1,
-                              customerQueue.size(),
-                              totalCustomersServed,
-                              avgWait });
+                             ? totalWaitTime / totalCustomersServed
+                             : 0.0;
+        snapshots.push_back({currentTime + 1,
+                             customerQueue.size(),
+                             totalCustomersServed,
+                             avgWait});
 
         currentTime++;
     }
