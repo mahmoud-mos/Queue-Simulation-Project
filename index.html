@@ -141,7 +141,7 @@
     .readout-val.plain { color: var(--text); }
     .readout-sub { font-size: 11px; color: var(--text3); font-family: var(--body); margin-top: 5px; }
 
-    /* ── Chart grid: donut left, stacked bar right (top row) ── */
+    /* Chart grid: donut left, stacked bar right (top row) */
     .chart-top-row {
       display: grid;
       grid-template-columns: 260px 1fr;
@@ -153,7 +153,7 @@
       margin-bottom: 1px; /* flush with bottom row */
     }
 
-    /* ── Bottom row: queue bar + wait line ── */
+    /* Bottom row: queue bar + wait line */
     .chart-bottom-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -444,7 +444,7 @@
       y: { ticks: { color: tickColor, font: tickFont }, grid: { color: gridColor }, beginAtZero: true }
     };
 
-    // ── Donut ──────────────────────────────────────────────────────────────
+    // Donut
     donutChart = new Chart(document.getElementById('chart-donut'), {
       type: 'doughnut',
       data: {
@@ -470,7 +470,7 @@
       }
     });
 
-    // ── VIP stacked bar ────────────────────────────────────────────────────
+    // VIP stacked bar
     vipChart = new Chart(document.getElementById('chart-vip'), {
       type: 'bar',
       data: {
@@ -509,7 +509,7 @@
       }
     });
 
-    // ── Queue length bar ───────────────────────────────────────────────────
+    // Queue length bar
     qChart = new Chart(document.getElementById('chart-queue'), {
       type: 'bar',
       data: {
@@ -524,7 +524,7 @@
       options: { responsive: true, plugins: { legend: { display: false }, tooltip }, scales }
     });
 
-    // ── Avg wait line ──────────────────────────────────────────────────────
+    // Avg wait line
     wChart = new Chart(document.getElementById('chart-wait'), {
       type: 'line',
       data: {
