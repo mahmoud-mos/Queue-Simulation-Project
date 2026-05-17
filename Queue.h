@@ -1,6 +1,7 @@
-        // Ziad Waleed Sallam 320250274
+// Ziad Waleed Sallam 320250274
 #ifndef QUEUE_h
 #define QUEUE_h
+
 template <typename T>
 struct Node
 {
@@ -12,6 +13,7 @@ struct Node
         next = nullptr;
     }
 };
+
 template <typename T>
 class Queue
 {
@@ -55,21 +57,59 @@ public:
     {
         return Size;
     }
+
     void enqueue(T x)
     {
         Node<T> *Q = new Node<T>(x);
 
-        if (!empty())
-        {
-            Rear->next = Q;
-        }
-        Rear = Q;
-        if (Size == 0)
+        // queue is empty
+        if (empty())
         {
             Front = Q;
+            Rear = Q;
+            Size++;
+            return;
         }
+
+        // customer is a VIP
+        if (x.getIsVip())
+        {
+            // the first person in line is a regular customer > VIP cuts to the front.
+            if (!Front->data.getIsVip())
+            {
+                Q->next = Front;
+                Front = Q;
+            }
+            else
+            {
+                // find last VIP node to insert after it.
+                Node<T> *curr = Front;
+                while (curr->next != nullptr && curr->next->data.getIsVip())
+                {
+                    curr = curr->next;
+                }
+
+                // insert the new VIP node right after 'curr'
+                Q->next = curr->next;
+                curr->next = Q;
+
+                // inserted at the very end, update Rear
+                if (Q->next == nullptr)
+                {
+                    Rear = Q;
+                }
+            }
+        }
+        // standard customer appends normally
+        else
+        {
+            Rear->next = Q;
+            Rear = Q;
+        }
+
         Size++;
     }
+
     void dequeue()
     {
         if (empty())
@@ -101,6 +141,7 @@ public:
         }
         while (!empty())
         {
+        
             dequeue();
         }
         if (x.empty())

@@ -14,7 +14,9 @@ struct MinuteSnapshot
 {
     int minute;
     int queue_length;
-    int customers_served;
+    int customers_served; // total (vip + regular)
+    int vip_served;       // VIP customers served so far
+    int regular_served;   // regular customers served so far
     double avg_wait_time;
 };
 
@@ -46,10 +48,15 @@ inline void writeResults(const vector<MinuteSnapshot> &snapshots)
         return;
     }
 
-    outFile << "minute,queue_length,customers_served,avg_wait_time\n"; // header for the file
+    // header 
+    outFile << "minute,queue_length,customers_served,vip_served,regular_served,avg_wait_time\n";
     for (const auto &s : snapshots)
-        outFile << s.minute << "," << s.queue_length << ","    
-                << s.customers_served << "," << s.avg_wait_time << "\n";
+        outFile << s.minute << ","
+                << s.queue_length << ","
+                << s.customers_served << ","
+                << s.vip_served << ","
+                << s.regular_served << ","
+                << s.avg_wait_time << "\n";
 
     outFile.close();
     cout << "Results written to results.csv\n";

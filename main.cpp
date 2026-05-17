@@ -23,16 +23,14 @@ int main()
 
     // Stats
     int totalCustomersServed = 0;
+    int totalVipServed = 0;     // Vip
+    int totalRegularServed = 0; // regular
     double totalWaitTime = 0;
     int customerNumber = 1;
     int currentTime = 0;
     int maxQueueLength = 0;
 
-<<<<<<< HEAD
     // Per minute snapshots for the CSV file
-=======
-    //Per minute snapshots for the CSV file 
->>>>>>> c433081b5217d755b900f36fc1461ecd49bc965c
     vector<MinuteSnapshot> snapshots;
     Queue<Customer> customerQueue;
     Server *servers = new Server[numServers];
@@ -46,12 +44,17 @@ int main()
 
     while (currentTime < maxSimulationTime)
     {
-
         if ((rand() % 100 + 1) <= arrivalProbability)
         {
             int svcTime = (rand() % maxServiceTime) + 1;
-            Customer newCustomer(customerNumber, currentTime, svcTime);
+
+            // new customers is 10% chance to be a VIP
+            bool isVip = (rand() % 100 + 1) <= 10;
+
+            Customer newCustomer(customerNumber, currentTime, svcTime, isVip);
             customerQueue.enqueue(newCustomer);
+
+            cout << (isVip ? "[VIP] " : "[Regular] ") << "Customer #" << customerNumber << " arrived.\n";
             customerNumber++;
         }
 
@@ -67,21 +70,34 @@ int main()
             {
                 Customer next = customerQueue.front();
                 customerQueue.dequeue();
+
                 int waitTime = currentTime - next.getArrivalTime();
                 next.setWaitTime(waitTime);
                 totalWaitTime += waitTime;
                 totalCustomersServed++;
+
+                // track VIP vs regular
+                if (next.getIsVip())
+                    totalVipServed++;
+                else
+                    totalRegularServed++;
+
+                cout << "Server " << servers[i].getId() << " took "
+                     << (next.getIsVip() ? "[VIP] " : "[Regular] ") << "Customer #" << next.getId() << "\n";
+
                 servers[i].assignCustomer(next);
             }
         }
 
-        // recording snapshots for this minute
+        // recording snapshots for this minute for vip/regular
         double avgWait = (totalCustomersServed > 0)
                              ? totalWaitTime / totalCustomersServed
                              : 0.0;
         snapshots.push_back({currentTime + 1,
                              customerQueue.size(),
                              totalCustomersServed,
+                             totalVipServed,     // vip
+                             totalRegularServed, // regular
                              avgWait});
 
         currentTime++;
@@ -89,6 +105,8 @@ int main()
 
     cout << "--simulation ended--\n";
     cout << "total served      = " << totalCustomersServed << "\n";
+    cout << "vip served        = " << totalVipServed << "\n";     // vip
+    cout << "regular served    = " << totalRegularServed << "\n"; // regular
     cout << "max queue length  = " << maxQueueLength << "\n";
     double finalAvg = (totalCustomersServed > 0) ? totalWaitTime / totalCustomersServed : 0.0;
     cout << "avg wait time     = " << finalAvg << " minutes\n";

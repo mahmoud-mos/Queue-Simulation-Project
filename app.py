@@ -15,7 +15,7 @@ import csv
 import json
 from flask import Flask, request, jsonify, send_from_directory
 
-# ── Paths ──────────────────────────────────────────────────────────────────
+# Paths 
 BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
 import platform
 SIM_EXE = os.path.join(BASE_DIR, "simulation.exe" if platform.system() == "Windows" else "simulation")
@@ -24,7 +24,7 @@ RESULTS_CSV  = os.path.join(BASE_DIR, "results.csv")
 
 app = Flask(__name__, static_folder=BASE_DIR)
 
-# ── Helpers ────────────────────────────────────────────────────────────────
+# Helpers 
 
 def write_settings(num_servers: int, arrival_probability: int,
                    max_service_time: int, max_simulation_time: int) -> None:
@@ -59,7 +59,7 @@ def run_simulation(timeout: int = 30) -> tuple[bool, str]:
 
 
 def read_results() -> list[dict]:
-    """Parse results.csv into a list of row dicts."""
+    """Parse results.csv into a list of row dicts — now includes vip_served and regular_served."""
     if not os.path.isfile(RESULTS_CSV):
         raise FileNotFoundError("results.csv was not produced by the simulation.")
 
@@ -68,15 +68,17 @@ def read_results() -> list[dict]:
         reader = csv.DictReader(f)
         for row in reader:
             rows.append({
-                "minute":            int(row["minute"]),
-                "queue_length":      int(row["queue_length"]),
-                "customers_served":  int(row["customers_served"]),
-                "avg_wait_time":     round(float(row["avg_wait_time"]), 2),
+                "minute":           int(row["minute"]),
+                "queue_length":     int(row["queue_length"]),
+                "customers_served": int(row["customers_served"]),
+                "vip_served":       int(row.get("vip_served", 0)),       # VIP's served
+                "regular_served":   int(row.get("regular_served", 0)),   # regular's served
+                "avg_wait_time":    round(float(row["avg_wait_time"]), 2),
             })
     return rows
 
 
-# ── Routes ─────────────────────────────────────────────────────────────────
+# Routes
 
 @app.route("/")
 def index():
@@ -94,23 +96,22 @@ def run():
     """
     Expected JSON body:
     {
-        "servers":          int,   // number of servers         (1–20)
-        "arrival_rate":     int,   // arrival probability 1-100%
-        "service_time":     int,   // max service time in minutes
-        "simulation_time":  int    // optional, default 60
+        "servers":          int,
+        "arrival_rate":     int,
+        "service_time":     int,
+        "simulation_time":  int
     }
 
     Returns JSON:
     {
-        "rows":   [ { minute, queue_length, customers_served, avg_wait_time }, … ],
-        "summary": { avg_wait_time, max_queue_length, total_served },
+        "rows":    [ { minute, queue_length, customers_served, vip_served, regular_served, avg_wait_time }, … ],
+        "summary": { avg_wait_time, max_queue_length, total_served, total_vip, total_regular },
         "params":  { servers, arrival_rate, service_time, simulation_time },
         "log":     "…stdout from the exe…"
     }
     """
     body = request.get_json(force=True, silent=True) or {}
 
-    # ── Validate & extract params ──────────────────────────────────────────
     errors = []
 
     def get_int(key, default, lo, hi):
@@ -133,7 +134,6 @@ def run():
     if errors:
         return jsonify({"error": " | ".join(errors)}), 400
 
-    # ── Run pipeline ──────────────────────────────────────────────────────
     write_settings(num_servers, arrival_prob, max_service_time, sim_time)
 
     ok, message = run_simulation()
@@ -148,15 +148,18 @@ def run():
     if not rows:
         return jsonify({"error": "results.csv is empty."}), 500
 
-    # ── Build summary ──────────────────────────────────────────────────────
-    wait_times   = [r["avg_wait_time"]  for r in rows]
-    queue_lens   = [r["queue_length"]   for r in rows]
-    total_served = rows[-1]["customers_served"]
+    wait_times     = [r["avg_wait_time"]  for r in rows]
+    queue_lens     = [r["queue_length"]   for r in rows]
+    total_served   = rows[-1]["customers_served"]
+    total_vip      = rows[-1]["vip_served"]       # vip
+    total_regular  = rows[-1]["regular_served"]   # regular
 
     summary = {
-        "avg_wait_time":   round(sum(wait_times) / len(wait_times), 2),
+        "avg_wait_time":    round(sum(wait_times) / len(wait_times), 2),
         "max_queue_length": max(queue_lens),
-        "total_served":    total_served,
+        "total_served":     total_served,
+        "total_vip":        total_vip,      # total vip
+        "total_regular":    total_regular,  # total regular
     }
 
     return jsonify({
@@ -172,7 +175,7 @@ def run():
     })
 
 
-# ── Entry point ────────────────────────────────────────────────────────────
+# Entry point 
 if __name__ == "__main__":
     print("Queue Simulation Server")
     print(f"  Working dir : {BASE_DIR}")

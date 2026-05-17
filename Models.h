@@ -11,17 +11,19 @@ private:
     int arrivalTime;
     int requiredServiceTime;
     int waitTime;
+    bool isVip; // To track vip priority status
 
 public:
-    Customer() : id(0), arrivalTime(0), requiredServiceTime(0), waitTime(0) {}
-    Customer(int id, int arrivalTime, int requiredServiceTime)
-        : id(id), arrivalTime(arrivalTime), requiredServiceTime(requiredServiceTime), waitTime(0)
+    Customer() : id(0), arrivalTime(0), requiredServiceTime(0), waitTime(0), isVip(false) {}
+    Customer(int id, int arrivalTime, int requiredServiceTime, bool vip = false)                              // VIP constructor
+        : id(id), arrivalTime(arrivalTime), requiredServiceTime(requiredServiceTime), waitTime(0), isVip(vip) // initialization
     {
     }
     // DISPLAY FOR TESTING
     void display() const
     {
-        cout << "Customer ID: " << id
+        //VIP display
+        cout << (isVip ? "[VIP] " : "[Regular] ") << "Customer ID: " << id
              << " | Arrival: " << arrivalTime
              << " | Required Service: " << requiredServiceTime
              << " | Wait Time: " << waitTime << endl;
@@ -38,6 +40,7 @@ public:
     int getId() const { return id; }
     int getArrivalTime() const { return arrivalTime; }
     int getWaitTime() const { return waitTime; }
+    bool getIsVip() const { return isVip; } //VIP Getter
 };
 class Server
 {
@@ -55,6 +58,7 @@ public:
         remainingServiceTime = 0;
     }
     Server(int id) : id(id), busy(false), remainingServiceTime(0) {}
+
     // Assigning customer using Pass by Reference (const)
     void assignCustomer(const Customer &customer)
     {
@@ -73,9 +77,10 @@ public:
             remainingServiceTime = 0;
         }
     }
-    // Getters so main can check if the server is free
+    // so main can check if the server is free
     bool isBusy() const { return busy; }
     int getId() const { return id; }
+
     // DISPLAY FOR TESTING
     void display() const
     {

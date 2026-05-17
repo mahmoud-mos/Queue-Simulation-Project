@@ -45,202 +45,75 @@
       align-items: center;
     }
 
-    /* TOP BAR */
     .topbar {
-      width: 100%;
-      max-width: 860px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
+      width: 100%; max-width: 900px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2rem; padding-bottom: 1rem;
       border-bottom: 1px solid var(--border);
     }
-
     .sys-id { display: flex; align-items: center; gap: 1rem; }
-
     .sys-logo {
-      width: 34px; height: 34px;
-      background: var(--amber);
+      width: 34px; height: 34px; background: var(--amber);
       clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     }
-
-    .sys-name {
-      font-family: var(--display);
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      color: var(--amber);
-      text-transform: uppercase;
-    }
-
-    .sys-sub {
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--text3);
-      letter-spacing: 0.1em;
-      margin-top: 2px;
-    }
-
+    .sys-name { font-family: var(--display); font-size: 22px; font-weight: 700; letter-spacing: 0.14em; color: var(--amber); text-transform: uppercase; }
+    .sys-sub  { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: 0.1em; margin-top: 2px; }
     .status-cluster { display: flex; align-items: center; gap: 1.5rem; }
-
-    .status-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--text3);
-      letter-spacing: 0.08em;
-    }
-
-    .led {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #2a2a2a;
-      border: 1px solid #1a1a1a;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
+    .status-pill { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: 0.08em; }
+    .led { width: 7px; height: 7px; border-radius: 50%; background: #2a2a2a; border: 1px solid #1a1a1a; transition: background 0.3s, box-shadow 0.3s; }
     .led.on    { background: var(--green); box-shadow: 0 0 5px var(--green); }
     .led.amber { background: var(--amber); box-shadow: 0 0 5px var(--amber); }
     .led.blink { animation: blink 0.65s infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
-
     .clock { font-family: var(--mono); font-size: 10px; color: var(--text3); }
 
-    /* MAIN */
-    .panel { width: 100%; max-width: 860px; }
+    .panel { width: 100%; max-width: 900px; }
 
     .section-label {
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--text3);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-      padding-left: 2px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-family: var(--mono); font-size: 9px; color: var(--text3);
+      letter-spacing: 0.15em; text-transform: uppercase;
+      margin-bottom: 0.5rem; padding-left: 2px;
+      display: flex; align-items: center; gap: 8px;
     }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* PARAM BANK */
     .param-bank {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      position: relative;
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 3px; padding: 1.5rem; margin-bottom: 1.5rem; position: relative;
     }
-    .screw {
-      position: absolute;
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      background: var(--screw);
-      border: 1px solid #151515;
-    }
-    .screw.tl { top: 7px; left: 7px; }
-    .screw.tr { top: 7px; right: 7px; }
-    .screw.bl { bottom: 7px; left: 7px; }
-    .screw.br { bottom: 7px; right: 7px; }
+    .screw { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--screw); border: 1px solid #151515; }
+    .screw.tl { top: 7px; left: 7px; } .screw.tr { top: 7px; right: 7px; }
+    .screw.bl { bottom: 7px; left: 7px; } .screw.br { bottom: 7px; right: 7px; }
 
     .param-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-bottom: 1.25rem;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border); border: 1px solid var(--border);
+      border-radius: 2px; overflow: hidden; margin-bottom: 1.25rem;
     }
-
-    .param-cell {
-      background: var(--panel2);
-      padding: 1.1rem 1rem;
-      transition: background 0.15s;
-      position: relative;
-    }
+    .param-cell { background: var(--panel2); padding: 1.1rem 1rem; transition: background 0.15s; position: relative; }
     .param-cell:hover { background: var(--raised); }
-
-    .param-cell label {
-      display: block;
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--text3);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .param-cell input[type=number] {
-      width: 100%;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--amber2);
-      font-family: var(--mono);
-      font-size: 28px;
-      -moz-appearance: textfield;
-      line-height: 1;
-    }
+    .param-cell label { display: block; font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .param-cell input[type=number] { width: 100%; background: transparent; border: none; outline: none; color: var(--amber2); font-family: var(--mono); font-size: 28px; -moz-appearance: textfield; line-height: 1; }
     .param-cell input::-webkit-outer-spin-button,
     .param-cell input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .param-unit { font-family: var(--mono); font-size: 8px; color: var(--text3); margin-top: 4px; letter-spacing: 0.06em; }
+    .tick-marks { position: absolute; bottom: 5px; right: 7px; font-family: var(--mono); font-size: 8px; color: var(--border2); letter-spacing: -2px; }
 
-    .param-unit {
-      font-family: var(--mono);
-      font-size: 8px;
-      color: var(--text3);
-      margin-top: 4px;
-      letter-spacing: 0.06em;
-    }
-
-    .tick-marks {
-      position: absolute;
-      bottom: 5px; right: 7px;
-      font-family: var(--mono);
-      font-size: 8px;
-      color: var(--border2);
-      letter-spacing: -2px;
-    }
-
-    /* EXECUTE ROW */
     .execute-row { display: flex; gap: 1rem; align-items: stretch; }
-
     .exec-btn {
-      flex: 1;
-      padding: 0.9rem 1.5rem;
-      background: var(--amber-dim);
-      border: 1px solid var(--amber);
-      border-radius: 2px;
-      color: var(--amber2);
-      font-family: var(--display);
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      cursor: pointer;
+      flex: 1; padding: 0.9rem 1.5rem; background: var(--amber-dim);
+      border: 1px solid var(--amber); border-radius: 2px; color: var(--amber2);
+      font-family: var(--display); font-size: 15px; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer;
       transition: background 0.15s, box-shadow 0.15s;
     }
-    .exec-btn:hover:not(:disabled) {
-      background: #5a3a08;
-      box-shadow: 0 0 18px rgba(232,160,32,0.18);
-    }
+    .exec-btn:hover:not(:disabled) { background: #5a3a08; box-shadow: 0 0 18px rgba(232,160,32,0.18); }
     .exec-btn:active:not(:disabled) { transform: scale(0.998); }
     .exec-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
     .exec-indicator {
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 0.9rem 1.25rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 4px;
-      min-width: 170px;
+      background: var(--panel2); border: 1px solid var(--border); border-radius: 2px;
+      padding: 0.9rem 1.25rem; display: flex; flex-direction: column;
+      justify-content: center; gap: 4px; min-width: 170px;
     }
     .exec-lbl { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: 0.1em; }
     .exec-val { font-family: var(--mono); font-size: 12px; color: var(--text2); min-height: 15px; }
@@ -248,110 +121,89 @@
     .exec-val.done    { color: var(--green); }
     .exec-val.err     { color: var(--red); font-size: 10px; }
 
-    /* RESULTS */
     .results-panel { display: none; }
     .results-panel.active { display: block; }
 
-    /* READOUT STRIP */
+    /* 3-readout strip */
     .readout-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border); border: 1px solid var(--border);
+      border-radius: 2px; overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .readout { background: var(--panel2); padding: 1.25rem; position: relative; }
+    .readout::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .readout:nth-child(1)::before { background: var(--amber); }
+    .readout:nth-child(2)::before { background: var(--green); }
+    .readout:nth-child(3)::before { background: var(--border2); }
+    .readout-label { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .readout-val { font-family: var(--mono); font-size: 34px; color: var(--amber2); line-height: 1; }
+    .readout-val.green { color: var(--green); }
+    .readout-val.plain { color: var(--text); }
+    .readout-sub { font-size: 11px; color: var(--text3); font-family: var(--body); margin-top: 5px; }
+
+    /* ── Chart grid: donut left, stacked bar right (top row) ── */
+    .chart-top-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 260px 1fr;
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
       border-radius: 2px;
       overflow: hidden;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1px; /* flush with bottom row */
     }
 
-    .readout {
-      background: var(--panel2);
-      padding: 1.25rem;
-      position: relative;
-    }
-    .readout::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-    }
-    .readout:nth-child(1)::before { background: var(--amber); }
-    .readout:nth-child(2)::before { background: var(--green); }
-    .readout:nth-child(3)::before { background: var(--border2); }
-
-    .readout-label {
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--text3);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-    .readout-val {
-      font-family: var(--mono);
-      font-size: 34px;
-      color: var(--amber2);
-      line-height: 1;
-    }
-    .readout-val.green { color: var(--green); }
-    .readout-val.plain { color: var(--text); }
-    .readout-sub { font-size: 11px; color: var(--text3); font-family: var(--body); margin-top: 5px; }
-
-    /* CHART ROW */
-    .chart-row {
+    /* ── Bottom row: queue bar + wait line ── */
+    .chart-bottom-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
-      border-radius: 2px;
+      border-top: none; /* shares border with top row */
+      border-radius: 0 0 2px 2px;
       overflow: hidden;
       margin-bottom: 1.5rem;
     }
 
-    .chart-panel { background: var(--panel); padding: 1.25rem; }
+    .chart-cell { background: var(--panel); padding: 1.25rem; }
 
-    .chart-panel-hdr {
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--text3);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .chart-hdr {
+      font-family: var(--mono); font-size: 9px; color: var(--text3);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 0.9rem; display: flex; align-items: center; gap: 8px;
     }
-    .dot-amber { width:6px; height:6px; border-radius:50%; background:var(--amber); display:inline-block; }
-    .dot-green { width:6px; height:6px; border-radius:50%; background:var(--green); display:inline-block; }
+    .pip { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .pip-amber { background: var(--amber); }
+    .pip-green { background: var(--green); }
+    .pip-sq    { border-radius: 2px; }
 
-    /* FOOTER */
+    /* donut centre text */
+    .donut-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+    .donut-centre {
+      position: absolute;
+      text-align: center;
+      pointer-events: none;
+    }
+    .donut-pct  { font-family: var(--mono); font-size: 26px; color: var(--amber2); line-height: 1; }
+    .donut-lbl  { font-family: var(--mono); font-size: 8px; color: var(--text3); letter-spacing: 0.1em; margin-top: 4px; }
+
+    /* legend pills under donut */
+    .donut-legend { display: flex; gap: 1rem; justify-content: center; margin-top: 0.9rem; }
+    .leg-item { display: flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 9px; color: var(--text2); }
+    .leg-swatch { width: 9px; height: 9px; border-radius: 2px; }
+
     .footer-strip {
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 0.85rem 1.25rem;
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      align-items: center;
+      background: var(--panel2); border: 1px solid var(--border); border-radius: 2px;
+      padding: 0.85rem 1.25rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center;
     }
     .footer-param { font-family: var(--mono); font-size: 9px; color: var(--text3); }
     .footer-param::before { content: '▸ '; color: var(--amber-dim); }
     .footer-param span { color: var(--text2); }
-
     .new-run-btn {
-      margin-left: auto;
-      background: transparent;
-      border: 1px solid var(--border2);
-      color: var(--text2);
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.12em;
-      padding: 5px 14px;
-      border-radius: 2px;
-      cursor: pointer;
-      text-transform: uppercase;
+      margin-left: auto; background: transparent; border: 1px solid var(--border2);
+      color: var(--text2); font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
+      padding: 5px 14px; border-radius: 2px; cursor: pointer; text-transform: uppercase;
       transition: border-color 0.15s, color 0.15s;
     }
     .new-run-btn:hover { border-color: var(--amber-dim); color: var(--amber); }
@@ -380,7 +232,6 @@
   <div class="param-bank">
     <div class="screw tl"></div><div class="screw tr"></div>
     <div class="screw bl"></div><div class="screw br"></div>
-
     <div class="param-grid">
       <div class="param-cell">
         <label>Servers</label>
@@ -407,7 +258,6 @@
         <div class="tick-marks">||||</div>
       </div>
     </div>
-
     <div class="execute-row">
       <button class="exec-btn" id="run-btn" onclick="startSim()">▶ &nbsp; EXECUTE SIMULATION</button>
       <div class="exec-indicator">
@@ -439,13 +289,48 @@
     </div>
 
     <div class="section-label">Signal Traces</div>
-    <div class="chart-row">
-      <div class="chart-panel">
-        <div class="chart-panel-hdr"><span class="dot-amber"></span>Queue Length / Minute</div>
+
+    <!-- TOP ROW: donut + stacked bar -->
+    <div class="chart-top-row">
+
+      <!-- Donut: VIP share -->
+      <div class="chart-cell">
+        <div class="chart-hdr">
+          <span class="pip pip-amber pip-sq"></span>VIP Split
+        </div>
+        <div class="donut-wrap">
+          <canvas id="chart-donut" width="180" height="180"></canvas>
+          <div class="donut-centre">
+            <div class="donut-pct" id="donut-pct">—</div>
+            <div class="donut-lbl">VIP RATE</div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="leg-item"><div class="leg-swatch" style="background:rgba(232,160,32,0.88)"></div>VIP</div>
+          <div class="leg-item"><div class="leg-swatch" style="background:rgba(76,175,106,0.7)"></div>Regular</div>
+        </div>
+      </div>
+
+      <!-- Stacked bar: VIP vs Regular per minute -->
+      <div class="chart-cell">
+        <div class="chart-hdr">
+          <span class="pip pip-amber pip-sq"></span>VIP Priority Throughput
+          &nbsp;&nbsp;
+          <span class="pip pip-sq" style="background:rgba(76,175,106,0.7)"></span>Regular
+        </div>
+        <canvas id="chart-vip" height="185"></canvas>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM ROW: queue length + avg wait -->
+    <div class="chart-bottom-row">
+      <div class="chart-cell">
+        <div class="chart-hdr"><span class="pip pip-amber"></span>Queue Length / Minute</div>
         <canvas id="chart-queue" height="190"></canvas>
       </div>
-      <div class="chart-panel">
-        <div class="chart-panel-hdr"><span class="dot-green"></span>Avg Wait Time / Minute</div>
+      <div class="chart-cell">
+        <div class="chart-hdr"><span class="pip pip-green"></span>Avg Wait Time / Minute</div>
         <canvas id="chart-wait" height="190"></canvas>
       </div>
     </div>
@@ -458,7 +343,7 @@
 </div>
 
 <script>
-  let qChart, wChart;
+  let qChart, wChart, vipChart, donutChart;
 
   function updateClock() {
     document.getElementById('clock').textContent = new Date().toTimeString().slice(0,8);
@@ -514,10 +399,22 @@
     const queueData = rows.map(r => r.queue_length);
     const waitData  = rows.map(r => r.avg_wait_time);
 
+    // Per-minute deltas for the stacked bar
+    const vipDelta     = rows.map((r, i) => r.vip_served     - (i > 0 ? rows[i-1].vip_served     : 0));
+    const regularDelta = rows.map((r, i) => r.regular_served - (i > 0 ? rows[i-1].regular_served : 0));
+
+    // Readouts
     document.getElementById('m-avg').textContent   = summary.avg_wait_time.toFixed(1) + ' min';
     document.getElementById('m-max').textContent   = summary.max_queue_length;
     document.getElementById('m-total').textContent = summary.total_served;
 
+    // Donut centre %
+    const vipPct = summary.total_served > 0
+      ? Math.round(summary.total_vip / summary.total_served * 100)
+      : 0;
+    document.getElementById('donut-pct').textContent = vipPct + '%';
+
+    // Footer
     document.getElementById('footer-strip').innerHTML = `
       <div class="footer-param">servers <span>${params.servers}</span></div>
       <div class="footer-param">arrival <span>${params.arrival_rate}%/min</span></div>
@@ -528,8 +425,10 @@
 
     document.getElementById('results-panel').classList.add('active');
 
-    if (qChart) qChart.destroy();
-    if (wChart) wChart.destroy();
+    if (qChart)     qChart.destroy();
+    if (wChart)     wChart.destroy();
+    if (vipChart)   vipChart.destroy();
+    if (donutChart) donutChart.destroy();
 
     const gridColor = '#2a2c28';
     const tickFont  = { family: 'Share Tech Mono', size: 9 };
@@ -545,15 +444,99 @@
       y: { ticks: { color: tickColor, font: tickFont }, grid: { color: gridColor }, beginAtZero: true }
     };
 
+    // ── Donut ──────────────────────────────────────────────────────────────
+    donutChart = new Chart(document.getElementById('chart-donut'), {
+      type: 'doughnut',
+      data: {
+        labels: ['VIP', 'Regular'],
+        datasets: [{
+          data: [summary.total_vip, summary.total_regular],
+          backgroundColor: ['rgba(232,160,32,0.88)', 'rgba(76,175,106,0.7)'],
+          borderColor:     ['#e8a020', '#4caf6a'],
+          borderWidth: 1,
+          hoverOffset: 4,
+        }]
+      },
+      options: {
+        cutout: '68%',
+        responsive: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            ...tooltip,
+            callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}` }
+          }
+        }
+      }
+    });
+
+    // ── VIP stacked bar ────────────────────────────────────────────────────
+    vipChart = new Chart(document.getElementById('chart-vip'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'VIP',
+            data: vipDelta,
+            backgroundColor: 'rgba(232,160,32,0.88)',
+            borderWidth: 0, borderRadius: 1, borderSkipped: false,
+          },
+          {
+            label: 'Regular',
+            data: regularDelta,
+            backgroundColor: 'rgba(76,175,106,0.65)',
+            borderWidth: 0, borderRadius: 0, borderSkipped: false,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            ...tooltip,
+            callbacks: {
+              title: ctx => `Minute ${ctx[0].label}`,
+              label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}`
+            }
+          }
+        },
+        scales: {
+          x: { ...scales.x, stacked: true },
+          y: { ...scales.y, stacked: true }
+        }
+      }
+    });
+
+    // ── Queue length bar ───────────────────────────────────────────────────
     qChart = new Chart(document.getElementById('chart-queue'), {
       type: 'bar',
-      data: { labels, datasets: [{ data: queueData, backgroundColor: 'rgba(232,160,32,0.5)', borderColor: '#e8a020', borderWidth: 1, borderRadius: 1, borderSkipped: false }] },
+      data: {
+        labels,
+        datasets: [{
+          data: queueData,
+          backgroundColor: 'rgba(232,160,32,0.5)',
+          borderColor: '#e8a020', borderWidth: 1,
+          borderRadius: 1, borderSkipped: false
+        }]
+      },
       options: { responsive: true, plugins: { legend: { display: false }, tooltip }, scales }
     });
 
+    // ── Avg wait line ──────────────────────────────────────────────────────
     wChart = new Chart(document.getElementById('chart-wait'), {
       type: 'line',
-      data: { labels, datasets: [{ data: waitData, borderColor: '#4caf6a', backgroundColor: 'rgba(76,175,106,0.07)', tension: 0.4, fill: true, pointRadius: 2, pointBackgroundColor: '#4caf6a', borderWidth: 1.5 }] },
+      data: {
+        labels,
+        datasets: [{
+          data: waitData,
+          borderColor: '#4caf6a',
+          backgroundColor: 'rgba(76,175,106,0.07)',
+          tension: 0.4, fill: true,
+          pointRadius: 2, pointBackgroundColor: '#4caf6a', borderWidth: 1.5
+        }]
+      },
       options: { responsive: true, plugins: { legend: { display: false }, tooltip }, scales }
     });
   }
