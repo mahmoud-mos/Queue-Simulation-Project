@@ -4,7 +4,8 @@ An event queueing simulation built with a **C++ engine at its core** and a **Pyt
 
 ---
 ### preview
-![privew](./QSIM.jpg).
+![privew](./QSIM.jpg)
+
 ---
 
 ### System architecture
